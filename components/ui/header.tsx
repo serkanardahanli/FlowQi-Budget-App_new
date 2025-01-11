@@ -3,14 +3,11 @@
 import React from 'react'
 import Link from 'next/link'
 import { Menu, Bell } from 'lucide-react'
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-interface HeaderProps extends React.HTMLAttributes<HTMLElement> {}
-
-export function Header({ className }: HeaderProps) {
+export function Header() {
   return (
-    <header className={cn("flex h-14 items-center border-b bg-white px-4", className)}>
+    <header className="flex h-14 items-center border-b bg-white px-4">
       <Button variant="ghost" size="icon" className="mr-4">
         <Menu className="h-5 w-5" />
         <span className="sr-only">Toggle sidebar</span>
@@ -22,7 +19,7 @@ export function Header({ className }: HeaderProps) {
         <Link href="/reports" className="text-sm font-medium">Reports</Link>
       </nav>
       <div className="ml-auto flex items-center space-x-4">
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon">
           <Bell className="h-5 w-5" />
           <span className="sr-only">Notifications</span>
         </Button>
