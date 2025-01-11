@@ -1,15 +1,16 @@
-k'use client'
+'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Activity, Users, Package, FileText, DollarSign, Settings, ChevronLeft, Inbox, CheckSquare, Star } from 'lucide-react'
+import { Activity, Users, Package, FileText, DollarSign, Settings, ChevronLeft, Inbox, CheckSquare, Star, User, Grid, Plus } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useState } from 'react'
 
 const navItems = [
   {
-    title: 'Personal',
+    title: 'PERSONAL',
+    icon: User,
     items: [
       { title: 'Dashboard', href: '/dashboard', icon: Activity },
       { title: 'Inbox', href: '/inbox', icon: Inbox },
@@ -17,11 +18,13 @@ const navItems = [
     ],
   },
   {
-    title: 'Favorites',
+    title: 'FAVORITES',
+    icon: Star,
     items: [],
   },
   {
-    title: 'Modules',
+    title: 'MODULES',
+    icon: Grid,
     items: [
       { title: 'Customers', href: '/customers', icon: Users },
       { title: 'Products', href: '/products', icon: Package },
@@ -30,7 +33,8 @@ const navItems = [
     ],
   },
   {
-    title: 'Settings',
+    title: 'SETTINGS',
+    icon: Settings,
     items: [
       { title: 'Settings', href: '/settings', icon: Settings },
     ],
@@ -63,44 +67,44 @@ export function Sidebar() {
           )} />
         </Button>
       </div>
-      <nav className="flex-1 space-y-4 p-2">
+      <nav className="flex-1 space-y-6 p-4">
         {navItems.map((section) => (
           <div key={section.title}>
             {!isCollapsed && (
-              <h3 className="mb-2 px-2 text-xs font-semibold text-gray-500 uppercase">
-                {section.title}
-              </h3>
+              <div className="flex items-center gap-2 mb-2">
+                <section.icon className="h-4 w-4 text-gray-500" />
+                <h3 className="text-xs font-medium text-gray-500">
+                  {section.title}
+                </h3>
+              </div>
             )}
-            {section.items.map((item) => {
-              const isActive = pathname === item.href
-              return (
-                <Button
-                  key={item.href}
-                  asChild
-                  variant={isActive ? "secondary" : "ghost"}
-                  className={cn(
-                    "w-full justify-start",
-                    isCollapsed ? "px-2" : "px-4"
-                  )}
-                  title={isCollapsed ? item.title : undefined}
-                >
-                  <Link href={item.href}>
+            <div className="space-y-1">
+              {section.items.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-3 rounded-md px-2 py-1.5 text-sm font-medium",
+                      isActive ? "bg-gray-100 text-gray-900" : "text-gray-700 hover:bg-gray-100"
+                    )}
+                  >
                     <item.icon className="h-4 w-4" />
-                    {!isCollapsed && <span className="ml-2">{item.title}</span>}
+                    {!isCollapsed && <span>{item.title}</span>}
                   </Link>
-                </Button>
-              )
-            })}
-            {section.title === 'Favorites' && !isCollapsed && (
-              <Button
-                variant="ghost"
-                className="w-full justify-start px-4"
-                onClick={() => {/* Add to favorites logic */}}
-              >
-                <Star className="h-4 w-4" />
-                <span className="ml-2">Add to favorites</span>
-              </Button>
-            )}
+                )
+              })}
+              {section.title === 'FAVORITES' && !isCollapsed && (
+                <Link
+                  href="#"
+                  className="flex items-center gap-3 rounded-md px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Add to favorites</span>
+                </Link>
+              )}
+            </div>
           </div>
         ))}
       </nav>
