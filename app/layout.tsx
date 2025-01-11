@@ -1,12 +1,6 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata = {
-  title: 'FlowQi - Smart Budget Management',
-  description: 'Manage your business finances efficiently with FlowQi',
-}
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+import { SiteHeader } from "@/components/site-header"
 
 export default function RootLayout({
   children,
@@ -15,8 +9,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <SidebarProvider>
+          <div className="flex min-h-screen">
+            <AppSidebar />
+            <div className="flex-1">
+              <SiteHeader />
+              <main className="p-8">{children}</main>
+            </div>
+          </div>
+        </SidebarProvider>
+      </body>
     </html>
   )
 }
+
 
