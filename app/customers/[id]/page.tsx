@@ -1,10 +1,25 @@
-'use client'
+k'use client'
 
+import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChevronLeft, Activity, Users, Package, FileText, Calendar, MessageSquare, FileIcon, Building2, Mail, MapPin, Flag, CalendarIcon, UserCheck, Power } from 'lucide-react'
+import { EditCustomerForm } from "@/components/edit-customer-form"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+
+type CustomerData = {
+  number: string
+  name: string
+  city: string
+  country: string
+  startDate: string
+  endDate: string | null
+  usersCount: number
+  lastLogon: string
+  status: string
+}
 
 export default function CustomerDetailPage() {
   const router = useRouter()
@@ -12,26 +27,61 @@ export default function CustomerDetailPage() {
   const customerId = params.id
 
   // In een echte applicatie zou je hier de klantgegevens ophalen op basis van het ID
-  const customerData = {
-    number: '30492', // This would be system-generated in a real application
+  const [customerData, setCustomerData] = useState<CustomerData>({
+    number: '30492',
     name: 'Solution of Global Lojistik',
     city: 'Ankara',
     country: 'Turkey',
     startDate: '2023-01-15',
-    endDate: null, // null indicates the customer hasn't churned
+    endDate: null,
     usersCount: 25,
     lastLogon: '2025-01-06T14:30:00Z',
     status: 'Active'
+  })
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+
+  const handleSave = (updatedCustomer: CustomerData) => {
+    setCustomerData(updatedCustomer)
+    // In a real application, you would send this data to your backend
+    console.log('Saving updated customer data:', updatedCustomer)
+  }
+
+  const handleDelete = () => {
+    // In a real application, you would send a delete request to your backend
+    console.log('Deleting customer:', customerId)
+    setIsDeleteDialogOpen(false)
+    router.push('/customers')
   }
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={() => router.back()}>
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Back to Customers
-        </Button>
-        <h1 className="text-2xl font-bold">Customer Details</h1>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" onClick={() => router.back()}>
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back to Customers
+          </Button>
+          <h1 className="text-2xl font-bold">Customer Details</h1>
+        </div>
+        <div className="flex gap-2">
+          <EditCustomerForm customer={customerData} onSave={handleSave} />
+          <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="destructive">Delete Customer</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you sure you want to delete this customer?</DialogTitle>
+              </DialogHeader>
+              <p>This action cannot be undone.</p>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+                <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <Tabs defaultValue="overview" className="w-full">
