@@ -18,20 +18,38 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function Header({ className }: HeaderProps) {
+  const navItems = [
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/transactions', label: 'Transactions' },
+    { href: '/budget', label: 'Budget' },
+    { href: '/reports', label: 'Reports' },
+  ]
+
   return (
     <header className={cn("flex h-14 items-center gap-4 border-b bg-white px-6", className)}>
-      <Button variant="ghost" size="icon" className="md:hidden">
+      <Button variant="ghost" size="icon" className="shrink-0">
         <Menu className="h-5 w-5" />
         <span className="sr-only">Toggle sidebar</span>
       </Button>
+      <nav className="hidden md:flex items-center gap-4">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
       <div className="flex flex-1 items-center justify-end gap-4">
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="shrink-0">
           <Bell className="h-5 w-5" />
           <span className="sr-only">Notifications</span>
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatars/01.png" alt="@username" />
                 <AvatarFallback>SC</AvatarFallback>
@@ -64,3 +82,5 @@ export function Header({ className }: HeaderProps) {
     </header>
   )
 }
+
+
