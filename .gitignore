@@ -1,7 +1,4 @@
-.DS_Store
-app/.DS_Store
 node_modules/
 .next/
-.DS_Store
-**/.DS_Store
-**/.DS_Store
+.env
+.env.local

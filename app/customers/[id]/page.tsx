@@ -10,6 +10,7 @@ import { EditCustomerForm } from "@/components/edit-customer-form"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { getCustomerUserCount, getCustomerLastLogin } from '@/services/customer-service'
 import { getActivitiesForEntity } from '@/services/activity-service'
+import { app } from '@/lib/firebase' // Import the initialized Firebase app
 
 type CustomerData = {
   id: string
@@ -47,6 +48,9 @@ export default function CustomerDetailPage() {
   })
 
   useEffect(() => {
+    // Ensure Firebase is initialized
+    if (!app) return
+
     // In een echte applicatie zou je hier de klantgegevens ophalen op basis van het ID
     setCustomerData({
       id: customerId,
@@ -73,7 +77,7 @@ export default function CustomerDetailPage() {
 
   useEffect(() => {
     async function loadSystemInfo() {
-      if (customerData?.id) {
+      if (customerData?.id && app) {
         const [userCount, lastLogin, activities] = await Promise.all([
           getCustomerUserCount(customerData.id),
           getCustomerLastLogin(customerData.id),
@@ -280,3 +284,5 @@ export default function CustomerDetailPage() {
     </div>
   )
 }
+
+

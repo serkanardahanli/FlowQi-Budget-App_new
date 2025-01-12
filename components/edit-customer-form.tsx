@@ -1,4 +1,4 @@
-k'use client'
+'use client'
 
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,17 @@ type CustomerData = {
   address: string
   country: string
   city: string
-  // ... other fields
+  zipCode: string
+  timezone: string
+  startDate: string
+  endDate: string | null
+  usersCount: number
+  lastLogon: string
+  status: string
+  createdBy: string
+  createdAt: string
+  type: string
+  accountType: string
 }
 
 type EditCustomerFormProps = {
@@ -29,24 +39,20 @@ const countryOptions = [
   { value: 'turkey', label: 'Turkey' },
   { value: 'usa', label: 'United States' },
   { value: 'uk', label: 'United Kingdom' },
-  // Add more countries as needed
 ]
 
 const cityOptions = {
   turkey: [
     { value: 'ankara', label: 'Ankara' },
     { value: 'istanbul', label: 'Istanbul' },
-    // Add more cities as needed
   ],
   usa: [
     { value: 'new-york', label: 'New York' },
     { value: 'los-angeles', label: 'Los Angeles' },
-    // Add more cities as needed
   ],
   uk: [
     { value: 'london', label: 'London' },
     { value: 'manchester', label: 'Manchester' },
-    // Add more cities as needed
   ],
 }
 
@@ -60,7 +66,6 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
     const { name, value } = 'target' in e ? e.target : e
     setEditedCustomer(prev => ({ ...prev, [name]: value }))
 
-    // If country changes, reset city
     if (name === 'country') {
       setEditedCustomer(prev => ({ ...prev, city: '' }))
     }
@@ -69,7 +74,6 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Track what fields were changed
     const changes = Object.entries(editedCustomer).reduce((acc, [key, value]) => {
       if (customer[key as keyof CustomerData] !== value) {
         acc.push({
@@ -81,14 +85,13 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
       return acc
     }, [] as { field: string, oldValue: string, newValue: string }[])
 
-    // Log the activity
     await logActivity({
       action: 'update',
       entityType: 'customer',
       entityId: customer.id,
       changes,
       performedBy: {
-        id: 'current-user-id', // This would come from your auth system
+        id: 'current-user-id',
         name: 'Current User'
       }
     })
@@ -107,6 +110,15 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
           <DialogTitle>Edit Customer Information</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="name">Company Name</Label>
+            <Input 
+              id="name" 
+              name="name"
+              value={editedCustomer.name} 
+              onChange={handleChange} 
+            />
+          </div>
           <div>
             <Label htmlFor="email">Email</Label>
             <Input 
@@ -162,3 +174,5 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
     </Dialog>
   )
 }
+
+
