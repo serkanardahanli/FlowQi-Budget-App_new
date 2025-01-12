@@ -10,6 +10,7 @@ import { EditCustomerForm } from "@/components/edit-customer-form"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 
 type CustomerData = {
+  id: string
   number: string
   name: string
   city: string
@@ -28,16 +29,17 @@ export default function CustomerDetailPage() {
 
   // In een echte applicatie zou je hier de klantgegevens ophalen op basis van het ID
   const [customerData, setCustomerData] = useState<CustomerData>({
-    number: '30492',
-    name: 'Solution of Global Lojistik',
-    city: 'Ankara',
-    country: 'Turkey',
-    startDate: '2023-01-15',
-    endDate: null,
-    usersCount: 25,
-    lastLogon: '2025-01-06T14:30:00Z',
-    status: 'Active'
-  })
+  id: '1', // Dit zou normaal gesproken van de backend komen
+  number: '30492',
+  name: 'Solution of Global Lojistik',
+  city: 'Ankara',
+  country: 'Turkey',
+  startDate: '2023-01-15',
+  endDate: null,
+  usersCount: 25,
+  lastLogon: '2025-01-06T14:30:00Z',
+  status: 'Active'
+})
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
@@ -149,6 +151,13 @@ export default function CustomerDetailPage() {
             <CardContent className="p-6">
               <h2 className="text-xl font-semibold mb-6">Customer Information</h2>
               <div className="space-y-4">
+                <div className="grid grid-cols-[24px_1fr] gap-4 items-center">
+                  <FileText className="h-6 w-6 text-muted-foreground" />
+                  <div>
+                    <div className="text-sm text-muted-foreground mb-1">Customer ID</div>
+                    <div>{customerData.id}</div>
+                  </div>
+                </div>
                 <div className="grid grid-cols-[24px_1fr] gap-4 items-center">
                   <Building2 className="h-6 w-6 text-muted-foreground" />
                   <div>

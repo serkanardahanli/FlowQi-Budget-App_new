@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 type CustomerData = {
+  id: string
   number: string
   name: string
   city: string
@@ -46,6 +47,10 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
           <DialogTitle>Edit Customer Information</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="id">Customer ID</Label>
+            <Input id="id" name="id" value={editedCustomer.id} disabled />
+          </div>
           <div>
             <Label htmlFor="name">Company Name</Label>
             <Input id="name" name="name" value={editedCustomer.name} onChange={handleChange} />
