@@ -1,16 +1,33 @@
-import React from 'react'
+'use client'
+
+import { useState } from 'react'
+import { createTestCustomer } from '../services/customer-service'
 
 export default function Home() {
+  const [message, setMessage] = useState<string | null>(null)
+
+  const handleCreateTestCustomer = async () => {
+    try {
+      const customerId = await createTestCustomer()
+      setMessage(`Test customer created with ID: ${customerId}`)
+    } catch (error) {
+      setMessage('Error creating test customer. Check console for details.')
+      console.error(error)
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to <span className="text-blue-600">FlowQi</span>
-        </h1>
-        <p className="mt-3 text-2xl">
-          Your personal budget management solution
-        </p>
-      </main>
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <h1 className="text-4xl font-bold mb-8">Welcome to FlowQi</h1>
+      <button
+        onClick={handleCreateTestCustomer}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+      >
+        Create Test Customer
+      </button>
+      {message && (
+        <p className="mt-4 p-4 bg-gray-100 rounded">{message}</p>
+      )}
+    </main>
   )
 }
