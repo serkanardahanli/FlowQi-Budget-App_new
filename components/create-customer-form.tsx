@@ -8,6 +8,7 @@ type CustomerData = {
   id: string
   number: string
   name: string
+  email: string
   city: string
   country: string
   startDate: string
@@ -21,7 +22,6 @@ type CreateCustomerFormProps = {
   onSave: (newCustomer: CustomerData) => void
 }
 
-// Functie om een uniek ID te genereren
 const generateUniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
 }
@@ -31,6 +31,7 @@ export function CreateCustomerForm({ onSave }: CreateCustomerFormProps) {
   const [newCustomer, setNewCustomer] = useState<Omit<CustomerData, 'id'>>({
     number: '',
     name: '',
+    email: '',
     city: '',
     country: '',
     startDate: new Date().toISOString().split('T')[0],
@@ -56,6 +57,7 @@ export function CreateCustomerForm({ onSave }: CreateCustomerFormProps) {
     setNewCustomer({
       number: '',
       name: '',
+      email: '',
       city: '',
       country: '',
       startDate: new Date().toISOString().split('T')[0],
@@ -81,6 +83,10 @@ export function CreateCustomerForm({ onSave }: CreateCustomerFormProps) {
             <Input id="name" name="name" value={newCustomer.name} onChange={handleChange} required />
           </div>
           <div>
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" name="email" type="email" value={newCustomer.email} onChange={handleChange} required />
+          </div>
+          <div>
             <Label htmlFor="number">Customer Number</Label>
             <Input id="number" name="number" value={newCustomer.number} onChange={handleChange} required />
           </div>
@@ -102,5 +108,3 @@ export function CreateCustomerForm({ onSave }: CreateCustomerFormProps) {
     </Dialog>
   )
 }
-
-
