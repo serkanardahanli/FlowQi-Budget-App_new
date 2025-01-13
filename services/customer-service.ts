@@ -107,7 +107,7 @@ export async function getCustomerLastLogin(customerId: string): Promise<Date | n
 
     if (docSnap.exists()) {
       const customerData = docSnap.data();
-      return customerData.lastLogin ? (customerData.lastLogin as Timestamp).toDate() : null;
+      return customerData.lastLogin ? customerData.lastLogin.toDate() : null;
     }
     return null;
   } catch (error) {
@@ -142,3 +142,5 @@ export {
   getCustomerLastLogin,
   getCustomerUserCount
 };
+
+

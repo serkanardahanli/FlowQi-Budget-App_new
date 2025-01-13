@@ -1,101 +1,28 @@
-'use client'
-
-import { useState } from 'react'
+import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { logActivity } from '@/services/activity-service'
-import Select from 'react-select'
+import { updateCustomer } from '@/services/customer-service'
+import { Customer } from '@/types/customer'
 
-type CustomerData = {
-  id: string
-  number: string
-  name: string
-  email: string
-  phone: string
-  address: string
-  country: string
-  city: string
-  zipCode: string
-  timezone: string
-  startDate: string
-  endDate: string | null
-  usersCount: number
-  lastLogon: string
-  status: string
-  createdBy: string
-  createdAt: string
-  type: string
-  accountType: string
-}
-
-type EditCustomerFormProps = {
-  customer: CustomerData
-  onSave: (updatedCustomer: CustomerData) => void
-}
-
-const countryOptions = [
-  { value: 'turkey', label: 'Turkey' },
-  { value: 'usa', label: 'United States' },
-  { value: 'uk', label: 'United Kingdom' },
-]
-
-const cityOptions = {
-  turkey: [
-    { value: 'ankara', label: 'Ankara' },
-    { value: 'istanbul', label: 'Istanbul' },
-  ],
-  usa: [
-    { value: 'new-york', label: 'New York' },
-    { value: 'los-angeles', label: 'Los Angeles' },
-  ],
-  uk: [
-    { value: 'london', label: 'London' },
-    { value: 'manchester', label: 'Manchester' },
-  ],
+interface EditCustomerFormProps {
+  customer: Customer
+  onSave: (updatedCustomer: Customer) => void
 }
 
 export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [editedCustomer, setEditedCustomer] = useState(customer)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [editedCustomer, setEditedCustomer] = React.useState(customer)
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement> | { name: string; value: string }
-  ) => {
-    const { name, value } = 'target' in e ? e.target : e
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
     setEditedCustomer(prev => ({ ...prev, [name]: value }))
-
-    if (name === 'country') {
-      setEditedCustomer(prev => ({ ...prev, city: '' }))
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    const changes = Object.entries(editedCustomer).reduce((acc, [key, value]) => {
-      if (customer[key as keyof CustomerData] !== value) {
-        acc.push({
-          field: key,
-          oldValue: customer[key as keyof CustomerData],
-          newValue: value
-        })
-      }
-      return acc
-    }, [] as { field: string, oldValue: string, newValue: string }[])
-
-    await logActivity({
-      action: 'update',
-      entityType: 'customer',
-      entityId: customer.id,
-      changes,
-      performedBy: {
-        id: 'current-user-id',
-        name: 'Current User'
-      }
-    })
-
+    await updateCustomer(customer.id, editedCustomer)
     onSave(editedCustomer)
     setIsOpen(false)
   }
@@ -107,65 +34,35 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Customer Information</DialogTitle>
+          <DialogTitle>Edit Customer</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name">Company Name</Label>
-            <Input 
-              id="name" 
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
               name="name"
-              value={editedCustomer.name} 
-              onChange={handleChange} 
+              value={editedCustomer.name}
+              onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              name="email" 
+            <Input
+              id="email"
+              name="email"
               type="email"
-              value={editedCustomer.email} 
-              onChange={handleChange} 
+              value={editedCustomer.email}
+              onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="phone">Phone</Label>
-            <Input 
-              id="phone" 
-              name="phone" 
-              value={editedCustomer.phone} 
-              onChange={handleChange} 
-            />
-          </div>
-          <div>
-            <Label htmlFor="address">Address</Label>
-            <Input 
-              id="address" 
-              name="address" 
-              value={editedCustomer.address} 
-              onChange={handleChange} 
-            />
-          </div>
-          <div>
-            <Label htmlFor="country">Country</Label>
-            <Select
-              id="country"
-              name="country"
-              options={countryOptions}
-              value={countryOptions.find(option => option.value === editedCustomer.country)}
-              onChange={(option) => handleChange({ name: 'country', value: option?.value || '' })}
-            />
-          </div>
-          <div>
-            <Label htmlFor="city">City</Label>
-            <Select
-              id="city"
-              name="city"
-              options={cityOptions[editedCustomer.country as keyof typeof cityOptions] || []}
-              value={cityOptions[editedCustomer.country as keyof typeof cityOptions]?.find(option => option.value === editedCustomer.city)}
-              onChange={(option) => handleChange({ name: 'city', value: option?.value || '' })}
-              isDisabled={!editedCustomer.country}
+            <Input
+              id="phone"
+              name="phone"
+              value={editedCustomer.phone || ''}
+              onChange={handleChange}
             />
           </div>
           <Button type="submit">Save Changes</Button>
@@ -174,5 +71,3 @@ export function EditCustomerForm({ customer, onSave }: EditCustomerFormProps) {
     </Dialog>
   )
 }
-
-
