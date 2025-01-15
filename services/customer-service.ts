@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase'
-import { collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, serverTimestamp, Timestamp } from 'firebase/firestore'
+import { collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { Customer } from '@/types/customer'
 
 const CUSTOMER_COLLECTION = 'customers'
@@ -132,15 +132,4 @@ export async function getCustomerUserCount(customerId: string): Promise<number> 
   }
 }
 
-export {
-  getAllCustomers,
-  createCustomer,
-  getCustomer,
-  updateCustomer,
-  deleteCustomer,
-  createTestCustomer,
-  getCustomerLastLogin,
-  getCustomerUserCount
-};
-
-
+// Remove the duplicate exports at the end of the file

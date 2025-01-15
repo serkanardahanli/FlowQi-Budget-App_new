@@ -1,6 +1,27 @@
 import { db } from '@/lib/firebase'
 import { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp } from 'firebase/firestore'
-import { Activity } from '@/types/activity'
+import { Timestamp } from 'firebase/firestore'
+
+export interface ActivityChange {
+  field: string
+  oldValue: any
+  newValue: any
+}
+
+export interface PerformedBy {
+  id: string
+  name: string
+}
+
+export interface Activity {
+  id: string
+  action: 'create' | 'update' | 'delete'
+  entityType: string
+  entityId: string
+  changes?: ActivityChange[]
+  performedBy: PerformedBy
+  timestamp: Timestamp
+}
 
 const ACTIVITY_COLLECTION = 'activities'
 
@@ -22,10 +43,8 @@ export async function logActivity(activity: Omit<Activity, 'id' | 'timestamp'>):
   }
 }
 
-// Simplified query to match the index structure
 export async function getActivitiesForEntity(entityType: string, entityId: string): Promise<Activity[]> {
   try {
-    // This query matches the composite index we're creating
     const q = query(
       collection(db, ACTIVITY_COLLECTION),
       where('entityType', '==', entityType),
@@ -40,7 +59,6 @@ export async function getActivitiesForEntity(entityType: string, entityId: strin
   }
 }
 
-// Updated to match actual data structure
 export async function getRecentActivities(customerId?: string, limitCount = 50): Promise<Activity[]> {
   try {
     let q = query(
@@ -67,14 +85,6 @@ export async function getRecentActivities(customerId?: string, limitCount = 50):
   }
 }
 
-// Updated type to match actual data structure
-export interface ActivityChange {
-  field: string
-  oldValue: any
-  newValue: any
-}
-
-// Helper function to create activity with changes
 export function createActivityWithChanges(
   entityType: string,
   entityId: string,
@@ -91,14 +101,6 @@ export function createActivityWithChanges(
       name: 'Current User'
     }
   }
-}
-
-export interface Activity {
-  id: string;
-  entityType: string;
-  entityId: string;
-  timestamp: Date;
-  // Add other fields as necessary
 }
 
 export async function getActivitiesByEntityType(entityType: string, entityId: string): Promise<Activity[]> {
@@ -137,7 +139,3 @@ export async function getActivitiesByEntityId(entityId: string, entityType: stri
     timestamp: doc.data().timestamp.toDate()
   } as Activity));
 }
-
-export { logActivity, getRecentActivities, getActivitiesForEntity, getActivitiesByEntityType, getActivitiesByEntityId }
-
-

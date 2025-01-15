@@ -1,47 +1,29 @@
-'use client';
-
-import { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import React, { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export interface AddTransactionFormProps {
-  onSubmit: (transaction: {
-    description: string;
-    amount: number;
-    category: string;
-    date: string;
-  }) => void;
-  onCancel: () => void;
+  onSubmit: (transaction: { description: string; amount: number; category: string; date: string }) => void;
+  onCancel: () => void; // Add this line
 }
 
 export function AddTransactionForm({ onSubmit, onCancel }: AddTransactionFormProps) {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
-  const [date, setDate] = useState('');
+  const [description, setDescription] = useState('')
+  const [amount, setAmount] = useState('')
+  const [category, setCategory] = useState('')
+  const [date, setDate] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     onSubmit({
       description,
       amount: parseFloat(amount),
       category,
       date,
-    });
-    // Reset form fields
-    setDescription('');
-    setAmount('');
-    setCategory('');
-    setDate('');
-  };
+    })
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,7 +41,6 @@ export function AddTransactionForm({ onSubmit, onCancel }: AddTransactionFormPro
         <Input
           id="amount"
           type="number"
-          step="0.01"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           required
@@ -67,16 +48,14 @@ export function AddTransactionForm({ onSubmit, onCancel }: AddTransactionFormPro
       </div>
       <div>
         <Label htmlFor="category">Category</Label>
-        <Select onValueChange={setCategory} required>
+        <Select value={category} onValueChange={setCategory}>
           <SelectTrigger>
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="food">Food</SelectItem>
-            <SelectItem value="transport">Transport</SelectItem>
-            <SelectItem value="entertainment">Entertainment</SelectItem>
-            <SelectItem value="utilities">Utilities</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
+            <SelectItem value="income">Income</SelectItem>
+            <SelectItem value="expense">Expense</SelectItem>
+            {/* Add more categories as needed */}
           </SelectContent>
         </Select>
       </div>
@@ -95,5 +74,5 @@ export function AddTransactionForm({ onSubmit, onCancel }: AddTransactionFormPro
         <Button type="submit">Add Transaction</Button>
       </div>
     </form>
-  );
+  )
 }

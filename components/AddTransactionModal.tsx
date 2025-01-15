@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -11,20 +12,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { AddTransactionForm } from "./AddTransactionForm";
 
-interface AddTransactionModalProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onAddTransaction: (transaction: {
+export function AddTransactionModal() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleAddTransaction = (transaction: {
     description: string;
     amount: number;
     category: string;
     date: string;
-  }) => void;
-}
+  }) => {
+    // Here you would typically save the transaction to your backend
+    console.log('New transaction:', transaction);
+    setIsOpen(false);
+  };
 
-export function AddTransactionModal({ isOpen, onOpenChange, onAddTransaction }: AddTransactionModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Add Transaction</Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add New Transaction</DialogTitle>
@@ -33,14 +39,10 @@ export function AddTransactionModal({ isOpen, onOpenChange, onAddTransaction }: 
           </DialogDescription>
         </DialogHeader>
         <AddTransactionForm
-          onSubmit={(transaction) => {
-            onAddTransaction(transaction);
-            onOpenChange(false);
-          }}
-          onCancel={() => onOpenChange(false)}
+          onSubmit={handleAddTransaction}
+          onCancel={() => setIsOpen(false)}
         />
       </DialogContent>
     </Dialog>
   );
 }
-

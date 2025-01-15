@@ -1,141 +1,37 @@
-'use client'
-
 import * as React from "react"
-import { LayoutDashboard, Inbox, CheckSquare, DollarSign, Users, Package, FileText, HandshakeIcon, Settings, User } from 'lucide-react'
-import { useRouter } from "next/navigation"
-
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-} from "@/components/ui/sidebar"
+import Link from "next/link"
+import { LayoutDashboard, DollarSign, PieChart, FileText, Users, Settings } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter()
+const sidebarItems = [
+  { icon: LayoutDashboard, label: "Dashboard", href: "/" },
+  { icon: DollarSign, label: "Transactions", href: "/transactions" },
+  { icon: PieChart, label: "Budgets", href: "/budgets" },
+  { icon: FileText, label: "Reports", href: "/reports" },
+  { icon: Users, label: "Customers", href: "/customers" },
+  { icon: Settings, label: "Settings", href: "/settings" },
+]
 
-  const personalItems = [
-    {
-      title: "Dashboard",
-      icon: LayoutDashboard,
-      href: "/dashboard",
-    },
-    {
-      title: "Inbox",
-      icon: Inbox,
-      href: "/inbox",
-    },
-    {
-      title: "My Tasks",
-      icon: CheckSquare,
-      href: "/tasks",
-    },
-  ]
-
-  const moduleItems = [
-    {
-      title: "Budget",
-      icon: DollarSign,
-      href: "/budget",
-    },
-    {
-      title: "Customers",
-      icon: Users,
-      href: "/customers",
-    },
-    {
-      title: "Products",
-      icon: Package,
-      href: "/products",
-    },
-    {
-      title: "Invoices",
-      icon: FileText,
-      href: "/invoices",
-    },
-    {
-      title: "Deals",
-      icon: HandshakeIcon,
-      href: "/deals",
-    },
-  ]
-
+export function AppSidebar() {
   return (
-    <Sidebar {...props}>
-      <SidebarHeader className="border-b border-border p-4">
-        <div className="flex items-center gap-2 text-xl font-semibold">
-          <span className="text-primary">Flow</span>
-          <span>Qi</span>
-        </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Personal</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {personalItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                  >
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => router.push(item.href)}
-                    >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {item.title}
-                    </Button>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Modules</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {moduleItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                  >
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => router.push(item.href)}
-                    >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {item.title}
-                    </Button>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarRail />
-    </Sidebar>
+    <div className="flex h-full w-64 flex-col bg-background border-r">
+      <div className="flex h-14 items-center border-b px-4">
+        <h1 className="text-xl font-bold">FlowQi</h1>
+      </div>
+      <nav className="flex-1 space-y-1 px-2 py-4">
+        {sidebarItems.map((item) => (
+          <Link key={item.href} href={item.href} passHref>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+            >
+              <item.icon className="mr-2 h-4 w-4" />
+              <span>{item.label}</span>
+            </Button>
+          </Link>
+        ))}
+      </nav>
+    </div>
   )
 }
 

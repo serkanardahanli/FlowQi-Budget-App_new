@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 import { getAnalytics, isSupported } from 'firebase/analytics'
 import { getDatabase } from 'firebase/database'
 
@@ -20,6 +21,7 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
 const rtdb = getDatabase(app)
+const storage = getStorage(app)
 
 // Initialize Analytics and export it
 let analytics = null;
@@ -27,6 +29,4 @@ if (typeof window !== 'undefined') {
   isSupported().then(yes => yes && (analytics = getAnalytics(app)))
 }
 
-export { app, auth, db, rtdb, analytics }
-
-
+export { app, auth, db, rtdb, storage, analytics }

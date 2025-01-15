@@ -1,9 +1,15 @@
+import './globals.css'
+import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Sidebar } from "@/components/ui/sidebar"
-import { UserProfile } from "@/components/ui/user-profile"
-import "./globals.css"
+import { AppSidebar } from '@/components/app-sidebar'
+import { UserProfile } from '@/components/user-profile'
 
 const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'FlowQi',
+  description: 'Budget Software',
+}
 
 export default function RootLayout({
   children,
@@ -14,12 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="flex h-screen">
-          <Sidebar />
+          <AppSidebar />
           <div className="flex flex-1 flex-col">
-            <header className="flex h-14 items-center justify-end border-b bg-white px-4">
+            <header className="flex h-14 items-center justify-end border-b bg-background px-4">
               <UserProfile />
             </header>
-            <main className="flex-1 overflow-y-auto bg-gray-50">
+            <main className="flex-1 overflow-y-auto p-4">
               {children}
             </main>
           </div>
